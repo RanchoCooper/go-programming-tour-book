@@ -1,17 +1,20 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"gopkg.in/natefinch/lumberjack.v2"
 
 	"github.com/RanchoCooper/go-programming-tour-book/blog-service/configs"
 	"github.com/RanchoCooper/go-programming-tour-book/blog-service/global"
 	"github.com/RanchoCooper/go-programming-tour-book/blog-service/internal/model"
 	"github.com/RanchoCooper/go-programming-tour-book/blog-service/internal/routers"
+	"github.com/RanchoCooper/go-programming-tour-book/blog-service/pkg/logger"
 )
 
 func init() {
@@ -25,6 +28,12 @@ func init() {
 	err = setupDBEngine()
 	if err != nil {
 		log.Fatalf("init.setupDBEngine err: %v", err)
+	}
+
+	// init logger
+	err = setupLogger()
+	if err != nil {
+		log.Fatalf("init.setupLogger err: %v", err)
 	}
 }
 
@@ -68,5 +77,16 @@ func setupDBEngine() error {
 	if err != nil {
 		return err
 	}
+	return nil
+}
+
+func setupLogger() error {
+	global.Logger = logger.NewLogger(&lumberjack.Logger{
+		Filename:   global.AppSetting.LogSavePath + "/" + global.AppSetting.LogFileName + global.AppSetting.LogFileExt,
+		MaxSize:    600,
+		MaxAge:     10,
+		LocalTime:  true,
+	}, "", log.LstdFlags).WithCaller(2)
+	global.Logger.Infof(context.Background(), "%s: go-programming-tour-book/%s", "rancho", "blog-service")
 	return nil
 }
