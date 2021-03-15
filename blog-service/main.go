@@ -82,10 +82,10 @@ func setupDBEngine() error {
 
 func setupLogger() error {
 	global.Logger = logger.NewLogger(&lumberjack.Logger{
-		Filename:   global.AppSetting.LogSavePath + "/" + global.AppSetting.LogFileName + global.AppSetting.LogFileExt,
-		MaxSize:    600,
-		MaxAge:     10,
-		LocalTime:  true,
+		Filename:  global.AppSetting.LogSavePath + "/" + global.AppSetting.LogFileName + global.AppSetting.LogFileExt,
+		MaxSize:   600,
+		MaxAge:    10,
+		LocalTime: true,
 	}, "", log.LstdFlags).WithCaller(2)
 	global.Logger.Infof(context.Background(), "%s: go-programming-tour-book/%s", "rancho", "blog-service")
 	return nil
