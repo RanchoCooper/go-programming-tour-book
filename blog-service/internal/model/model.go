@@ -43,3 +43,8 @@ func NewDBEngine(databaseSetting configs.DatabaseSettingS) (*gorm.DB, error) {
 	sqlDB.SetMaxOpenConns(global.DatabaseSetting.MaxOpenConns)
 	return db, nil
 }
+
+func updateTimeStampForCreateCallback(db *gorm.DB) *gorm.DB {
+	// FIXME
+	return db
+}
