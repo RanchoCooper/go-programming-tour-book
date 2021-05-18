@@ -13,8 +13,8 @@ type Response struct {
 }
 
 type Pager struct {
-	Page      int `json:"page"`
-	PageSize  int `json:"page_size"`
+	Page      int   `json:"page"`
+	PageSize  int   `json:"page_size"`
 	TotalRows int64 `json:"total_rows"`
 }
 

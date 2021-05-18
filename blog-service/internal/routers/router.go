@@ -1,6 +1,10 @@
 package routers
 
 import (
+	"net/http"
+
+	"github.com/RanchoCooper/go-programming-tour-book/blog-service/global"
+	"github.com/RanchoCooper/go-programming-tour-book/blog-service/internal/routers/api"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -23,6 +27,9 @@ func NewRouter() *gin.Engine {
 	// tags and article API
 	article := v1.NewArticle()
 	tag := v1.NewTag()
+	upload := api.NewUpload()
+	r.POST("/upload/file", upload.UploadFile)
+	r.StaticFS("/static", http.Dir(global.AppSetting.UploadSavePath))
 	apiv1 := r.Group("/api/v1")
 	{
 		apiv1.POST("/tags", tag.Create)

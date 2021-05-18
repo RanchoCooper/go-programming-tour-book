@@ -9,6 +9,13 @@ App:
   LogSavePath: blog-service/storage/logs
   LogFileName: app
   LogFileExt: .log
+  UploadSavepath: blog-service/storage/uploads
+  UploadServerUrl: http://127.0.0.1:8000/static
+  UploadImageMaxSize: 5
+  UploadImageAllowExts:
+    - .jpg
+    - .jpeg
+    - .png
 Database:
   DBType: mysql
   Username: root
