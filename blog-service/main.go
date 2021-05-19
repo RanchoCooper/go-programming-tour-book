@@ -72,6 +72,11 @@ func setupSetting() error {
 		return nil
 	}
 	fmt.Printf("ServerSetting: %v\nAppSetting: %v\nDatabaseSetting: %v\n", global.ServerSetting, global.AppSetting, global.DatabaseSetting)
+	err =setting.ReadSection("JWT", &global.JWTSetting)
+	if err != nil {
+		return err
+	}
+	global.JWTSetting.Expire *= time.Second
 	return nil
 }
 

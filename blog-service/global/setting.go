@@ -9,6 +9,7 @@ var (
 	ServerSetting   *configs.ServerSettingS
 	AppSetting      *configs.AppSettingS
 	DatabaseSetting *configs.DatabaseSettingS
+	JWTSetting *configs.JWTSettingS
 
 	Logger *logger.Logger
 )
