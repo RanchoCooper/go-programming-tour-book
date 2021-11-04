@@ -3,7 +3,7 @@ package main
 import (
     "log"
 
-    "github.com/RanchoCooper/go-programming-tour-book/tour/convert/cmd"
+    "github.com/RanchoCooper/go-programming-tour-book/tour/cmd"
 )
 
 /**

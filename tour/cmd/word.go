@@ -4,7 +4,7 @@ import (
     "log"
     "strings"
 
-    "github.com/RanchoCooper/go-programming-tour-book/tour/convert/internal/word"
+    "github.com/RanchoCooper/go-programming-tour-book/tour/internal/word"
     "github.com/spf13/cobra"
 )
 
@@ -25,9 +25,9 @@ var str string
 var mode int8
 
  var wordCmd = &cobra.Command{
-     Use: "word",
+     Use:   "word",
      Short: "单词格式转换",
-     Long: desc,
+     Long:  desc,
      Run: func(cmd *cobra.Command, args []string) {
          var content string
          switch mode {
