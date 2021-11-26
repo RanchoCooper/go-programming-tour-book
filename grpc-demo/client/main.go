@@ -4,7 +4,8 @@ import (
 	"context"
 	"log"
 
-	"github.com/RanchoCooper/go-programming-tour-book/grpc-demo/proto"
+	"go-programming-tour-book/grpc-demo/proto"
+
 	"google.golang.org/grpc"
 )
 

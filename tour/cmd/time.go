@@ -6,7 +6,8 @@ import (
     "strings"
     "time"
 
-    "github.com/RanchoCooper/go-programming-tour-book/tour/internal/timer"
+    "go-programming-tour-book/tour/internal/timer"
+
     "github.com/spf13/cobra"
 )
 
