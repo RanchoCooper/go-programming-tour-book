@@ -1,7 +1,10 @@
 package main
 
 import (
-    "github.com/gin-gonic/gin"
+    "net/http"
+    "time"
+
+    "github.com/RanchoCooper/go-programming-tour-book/blog-service/internal/routers"
 )
 
 /**
@@ -10,11 +13,18 @@ import (
  */
 
 func main() {
-   r := gin.Default()
+    router := routers.NewRouter()
 
-   r.GET("/ping", func(context *gin.Context) {
-       context.JSON(200, gin.H{"message": "pong"})
-   })
+    s := &http.Server{
+        Addr: ":8888",
+        Handler: router,
+        ReadTimeout: 10 * time.Second,
+        WriteTimeout: 10 * time.Second,
+        MaxHeaderBytes: 1 << 20,
+    }
 
-   r.Run(":8888")
+    err := s.ListenAndServe()
+    if err != nil {
+        panic(err)
+    }
 }
