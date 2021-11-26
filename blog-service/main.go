@@ -6,10 +6,12 @@ import (
     "os"
     "time"
 
-    "github.com/gin-gonic/gin"
     "go-programming-tour-book/blog-service/global"
-	"go-programming-tour-book/blog-service/internal/routers"
+    "go-programming-tour-book/blog-service/internal/model"
+    "go-programming-tour-book/blog-service/internal/routers"
 	"go-programming-tour-book/blog-service/pkg/setting"
+
+    "github.com/gin-gonic/gin"
 )
 
 /**
@@ -18,27 +20,34 @@ import (
  */
 
 func init() {
-	err := setupSetting()
+    var err error
+	err = setupSetting()
 	if err != nil {
 		log.Fatalf("init.setupSetting err: %v", err)
 	}
+
+    err = setupDBEngine()
+    if err != nil {
+        log.Fatalf("init.setupDBEngine err: %v", err)
+    }
+
 }
 
 func setupSetting() error {
-	setting, err := setting.NewSetting()
+	settings, err := setting.NewSetting()
 	if err != nil {
 		return err
 	}
 
-	err = setting.ReadSection("Server", &global.ServerSetting)
+	err = settings.ReadSection("Server", &global.ServerSetting)
 	if err != nil {
 		return err
 	}
-	err = setting.ReadSection("App", &global.AppSetting)
+	err = settings.ReadSection("App", &global.AppSetting)
 	if err != nil {
 		return err
 	}
-	err = setting.ReadSection("Database", &global.DatabaseSetting)
+	err = settings.ReadSection("Database", &global.DatabaseSetting)
 	if err != nil {
 		return err
 	}
@@ -46,6 +55,16 @@ func setupSetting() error {
 	global.ServerSetting.ReadTimeout *= time.Second
 	global.ServerSetting.WriteTimeout *= time.Second
     global.DatabaseSetting.Password = os.Getenv("MYSQL_PASSWORD")
+
+    return nil
+}
+
+func setupDBEngine() error {
+    var err error
+    global.DBEngine, err = model.NewDBEngine(global.DatabaseSetting)
+    if err != nil {
+        return err
+    }
 
     return nil
 }
