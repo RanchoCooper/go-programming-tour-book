@@ -1,6 +1,9 @@
 package routers
 
 import (
+    "go-programming-tour-book/blog-service/pkg/app"
+    "go-programming-tour-book/blog-service/pkg/errcode"
+
     "github.com/gin-gonic/gin"
 )
 
@@ -18,7 +21,7 @@ func NewTag() Tag {
 }
 
 func (t Tag) Get(c *gin.Context) {
-
+    app.NewResponse(c).ToErrorResponse(errcode.ServerError)
 }
 
 func (t Tag) List(c *gin.Context) {
