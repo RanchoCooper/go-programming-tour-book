@@ -1,7 +1,11 @@
 package routers
 
 import (
+    _ "go-programming-tour-book/blog-service/docs"
+
     "github.com/gin-gonic/gin"
+    "github.com/swaggo/files"
+    ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 /**
@@ -13,6 +17,8 @@ func NewRouter() *gin.Engine {
     r := gin.Default()
     r.Use(gin.Logger())
     r.Use(gin.Recovery())
+
+    r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
     tag := NewTag()
     article := NewArticle()
