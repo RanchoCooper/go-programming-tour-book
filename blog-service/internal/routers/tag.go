@@ -1,6 +1,8 @@
 package routers
 
 import (
+    "go-programming-tour-book/blog-service/global"
+    "go-programming-tour-book/blog-service/internal/service"
     "go-programming-tour-book/blog-service/pkg/app"
     "go-programming-tour-book/blog-service/pkg/errcode"
 
@@ -44,7 +46,18 @@ func (t Tag) Get(c *gin.Context) {
 // @Failure 500 {object} errcode.Error "内部错误"
 // @Router /tags [get]
 func (t Tag) List(c *gin.Context) {
+    param := service.TagListRequest{}
+    response := app.NewResponse(c)
+    valid, errs := app.BindAndValid(c, &param)
+    if !valid {
+        global.Logger.Errorf("app.BindAndValid errs: %v", errs)
+        errResp := errcode.InvalidParams.WithDetails(errs.Errors()...)
+        response.ToErrorResponse(errResp)
+        return
+    }
 
+    response.ToResponse(gin.H{})
+    return
 }
 
 // Create create a tag

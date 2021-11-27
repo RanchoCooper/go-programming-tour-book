@@ -6,6 +6,7 @@ import (
     "os"
     "time"
 
+    "github.com/gin-gonic/gin/binding"
     "go-programming-tour-book/blog-service/global"
     "go-programming-tour-book/blog-service/internal/model"
     "go-programming-tour-book/blog-service/internal/routers"
@@ -36,6 +37,10 @@ func init() {
     err = setupLogger()
     if err != nil {
         log.Fatalf("init.setupLogger err: %v", err)
+    }
+    err = setupValidator()
+    if err != nil {
+        log.Fatalf("init.setupValidator err: %v", err)
     }
 }
 
@@ -108,5 +113,10 @@ func setupLogger() error {
         LocalTime:  true,
     }, "", log.LstdFlags).WithCaller(2)
 
+    return nil
+}
+
+func setupValidator() error {
+    binding.Validator = global.NewCustomValidator()
     return nil
 }
