@@ -1,12 +1,12 @@
 package routers
 
 import (
+    "github.com/gin-gonic/gin"
+
     "go-programming-tour-book/blog-service/global"
     "go-programming-tour-book/blog-service/internal/service"
     "go-programming-tour-book/blog-service/pkg/app"
     "go-programming-tour-book/blog-service/pkg/errcode"
-
-    "github.com/gin-gonic/gin"
 )
 
 /**
@@ -15,7 +15,6 @@ import (
  */
 
 type Tag struct {
-
 }
 
 func NewTag() Tag {
@@ -59,7 +58,7 @@ func (t Tag) List(c *gin.Context) {
     svc := service.New(c.Request.Context())
     pager := app.Pager{Page: app.GetPage(c), PageSize: app.GetPageSize(c)}
     totalRows, err := svc.CountTag(&service.CountTagRequest{
-        Name: param.Name,
+        Name:  param.Name,
         State: param.State,
     })
     if err != nil {

@@ -22,6 +22,10 @@ type AppSettingS struct {
 	LogSavePath     string
 	LogFileName     string
 	LogFileExt      string
+    UploadSavePath string
+    UploadServerURl string
+    UploadiMageMaxSize int
+    UploadImageAllowExts []string
 }
 
 type DatabaseSettingS struct {

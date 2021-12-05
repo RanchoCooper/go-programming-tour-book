@@ -1,20 +1,20 @@
 package main
 
 import (
-	"log"
-	"net/http"
+    "log"
+    "net/http"
     "os"
     "time"
 
+    "github.com/gin-gonic/gin"
     "github.com/gin-gonic/gin/binding"
+    "gopkg.in/natefinch/lumberjack.v2"
+
     "go-programming-tour-book/blog-service/global"
     "go-programming-tour-book/blog-service/internal/model"
     "go-programming-tour-book/blog-service/internal/routers"
     "go-programming-tour-book/blog-service/pkg/logger"
     "go-programming-tour-book/blog-service/pkg/setting"
-    "gopkg.in/natefinch/lumberjack.v2"
-
-    "github.com/gin-gonic/gin"
 )
 
 /**
@@ -24,10 +24,10 @@ import (
 
 func init() {
     var err error
-	err = setupSetting()
-	if err != nil {
-		log.Fatalf("init.setupSetting err: %v", err)
-	}
+    err = setupSetting()
+    if err != nil {
+        log.Fatalf("init.setupSetting err: %v", err)
+    }
 
     err = setupDBEngine()
     if err != nil {
@@ -49,23 +49,23 @@ func init() {
 // @description Go语言编程之旅
 func main() {
     gin.SetMode(global.ServerSetting.RunMode)
-	router := routers.NewRouter()
+    router := routers.NewRouter()
 
-	s := &http.Server{
-		Addr:           ":" + global.ServerSetting.HTTPPort,
-		Handler:        router,
-		ReadTimeout:    global.ServerSetting.ReadTimeout,
-		WriteTimeout:   global.ServerSetting.WriteTimeout,
-		MaxHeaderBytes: 1 << 20,
-	}
+    s := &http.Server{
+        Addr:           ":" + global.ServerSetting.HTTPPort,
+        Handler:        router,
+        ReadTimeout:    global.ServerSetting.ReadTimeout,
+        WriteTimeout:   global.ServerSetting.WriteTimeout,
+        MaxHeaderBytes: 1 << 20,
+    }
 
     // test logger
     global.Logger.Infof("%s: go-programming-tour-book/%s", "rancho", "blog-service")
 
-	err := s.ListenAndServe()
-	if err != nil {
-		panic(err)
-	}
+    err := s.ListenAndServe()
+    if err != nil {
+        panic(err)
+    }
 }
 
 func setupSetting() error {
@@ -107,10 +107,10 @@ func setupDBEngine() error {
 func setupLogger() error {
     fileName := global.AppSetting.LogSavePath + "/" + global.AppSetting.LogFileName + global.AppSetting.LogFileExt
     global.Logger = logger.NewLogger(&lumberjack.Logger{
-        Filename:   fileName,
-        MaxSize:    600,
-        MaxAge:     10,
-        LocalTime:  true,
+        Filename:  fileName,
+        MaxSize:   600,
+        MaxAge:    10,
+        LocalTime: true,
     }, "", log.LstdFlags).WithCaller(2)
 
     return nil

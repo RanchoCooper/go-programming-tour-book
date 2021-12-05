@@ -1,12 +1,12 @@
 package routers
 
 import (
-    _ "go-programming-tour-book/blog-service/docs"
-    "go-programming-tour-book/blog-service/internal/middleware"
-
     "github.com/gin-gonic/gin"
     "github.com/swaggo/files"
     ginSwagger "github.com/swaggo/gin-swagger"
+
+    _ "go-programming-tour-book/blog-service/docs"
+    "go-programming-tour-book/blog-service/internal/middleware"
 )
 
 /**
@@ -24,6 +24,11 @@ func NewRouter() *gin.Engine {
 
     tag := NewTag()
     article := NewArticle()
+    upload := NewUpload()
+
+    {
+        r.POST("/upload/file", upload.UploadFile)
+    }
 
     apiV1 := r.Group("/api/v1")
     {
