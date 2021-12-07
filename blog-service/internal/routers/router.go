@@ -30,11 +30,10 @@ func NewRouter() *gin.Engine {
 
     // static file
     r.POST("/upload/file", upload.UploadFile)
-    r.StaticFile("/static", global.AppSetting.UploadSavePath))
-
+    r.StaticFile("/static", global.AppSetting.UploadSavePath)
 
     {
-    r.POST("/upload/file", upload.UploadFile)
+        r.POST("/upload/file", upload.UploadFile)
     }
 
     apiV1 := r.Group("/api/v1")
