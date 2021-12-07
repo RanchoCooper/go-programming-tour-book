@@ -6,6 +6,7 @@ import (
     ginSwagger "github.com/swaggo/gin-swagger"
 
     _ "go-programming-tour-book/blog-service/docs"
+    "go-programming-tour-book/blog-service/global"
     "go-programming-tour-book/blog-service/internal/middleware"
 )
 
@@ -15,19 +16,25 @@ import (
  */
 
 func NewRouter() *gin.Engine {
+    tag := NewTag()
+    article := NewArticle()
+    upload := NewUpload()
+
     r := gin.Default()
     r.Use(gin.Logger())
     r.Use(gin.Recovery())
     r.Use(middleware.Translations())
 
+    // swagger doc
     r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-    tag := NewTag()
-    article := NewArticle()
-    upload := NewUpload()
+    // static file
+    r.POST("/upload/file", upload.UploadFile)
+    r.StaticFile("/static", global.AppSetting.UploadSavePath))
+
 
     {
-        r.POST("/upload/file", upload.UploadFile)
+    r.POST("/upload/file", upload.UploadFile)
     }
 
     apiV1 := r.Group("/api/v1")
