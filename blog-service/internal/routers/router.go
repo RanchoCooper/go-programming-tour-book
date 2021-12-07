@@ -32,12 +32,12 @@ func NewRouter() *gin.Engine {
     r.POST("/upload/file", upload.UploadFile)
     r.StaticFile("/static", global.AppSetting.UploadSavePath)
 
-    {
-        r.POST("/upload/file", upload.UploadFile)
-    }
+    // auth
+    r.POST("/auth", GetAuth)
 
     apiV1 := r.Group("/api/v1")
     {
+        // tags
         apiV1.POST("/tags", tag.Create)
         apiV1.DELETE("/tags/:id", tag.Delete)
         apiV1.PUT("/tags/:id", tag.Update)
@@ -45,6 +45,7 @@ func NewRouter() *gin.Engine {
         apiV1.GET("/tags", tag.List)
         apiV1.GET("/tags/:id", tag.Get)
 
+        // articles
         apiV1.POST("/articles", article.Create)
         apiV1.DELETE("/articles/:id", article.Delete)
         apiV1.PUT("/articles/:id", article.Update)

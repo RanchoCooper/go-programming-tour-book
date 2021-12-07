@@ -1,7 +1,7 @@
 package setting
 
 import (
-	"time"
+    "time"
 )
 
 /**
@@ -10,22 +10,28 @@ import (
  */
 
 type ServerSettingS struct {
-	RunMode      string
-	HTTPPort     string
-	ReadTimeout  time.Duration
-	WriteTimeout time.Duration
+    RunMode      string
+    HTTPPort     string
+    ReadTimeout  time.Duration
+    WriteTimeout time.Duration
 }
 
 type AppSettingS struct {
-	DefaultPageSize int
-	MaxPageSize     int
-	LogSavePath     string
-	LogFileName     string
-	LogFileExt      string
-    UploadSavePath string
-    UploadServerURl string
-    UploadiMageMaxSize int
+    DefaultPageSize      int
+    MaxPageSize          int
+    LogSavePath          string
+    LogFileName          string
+    LogFileExt           string
+    UploadSavePath       string
+    UploadServerURl      string
+    UploadiMageMaxSize   int
     UploadImageAllowExts []string
+}
+
+type JWTSettingS struct {
+    Secret string
+    Issuer string
+    Expire time.Duration
 }
 
 type DatabaseSettingS struct {

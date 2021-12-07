@@ -87,8 +87,14 @@ func setupSetting() error {
         return err
     }
 
+    err = settings.ReadSection("JWT", &global.JWTSetting)
+    if err != nil {
+        return nil
+    }
+
     global.ServerSetting.ReadTimeout *= time.Second
     global.ServerSetting.WriteTimeout *= time.Second
+    global.JWTSetting.Expire *= time.Second
     global.DatabaseSetting.Password = os.Getenv("MYSQL_PASSWORD")
 
     return nil

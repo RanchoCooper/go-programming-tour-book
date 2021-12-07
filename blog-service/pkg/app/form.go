@@ -14,8 +14,8 @@ import (
  */
 
 type ValidError struct {
-	Key     string
-	Message string
+    Key     string
+    Message string
 }
 
 type ValidErrors []*ValidError

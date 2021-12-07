@@ -44,3 +44,16 @@ CREATE TABLE IF NOT EXISTS `blog_article_tag` (
     `is_del` TINYINT(3) UNSIGNED DEFAULT '0' COMMENT '是否删除 0: 未删除, 1: 已删除',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COMMENT = '文章标签关联表';
+
+CREATE TABLE IF NOT EXISTS `blog_auth` (
+    `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `app_key` VARCHAR(20) NOT NULL DEFAULT '' COMMENT 'Key',
+    `app_secret` VARCHAR(50) NOT NULL DEFAULT '' COMMENT 'Secret',
+    `created_on` INT(10) UNSIGNED DEFAULT '0' COMMENT '创建时间',
+    `created_by` VARCHAR(100) DEFAULT '' COMMENT '创建人',
+    `modified_on` INT(10) UNSIGNED DEFAULT '0' COMMENT '修改时间',
+    `modified_by` VARCHAR(100) DEFAULT '' COMMENT '修改人',
+    `deleted_on` INT(10) UNSIGNED DEFAULT '0' COMMENT '删除时间',
+    `is_del` TINYINT(3) UNSIGNED DEFAULT '0' COMMENT '是否删除 0: 未删除, 1: 已删除',
+    PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COMMENT = '认证表';

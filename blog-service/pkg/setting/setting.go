@@ -15,7 +15,7 @@ type Setting struct {
 
 func NewSetting() (*Setting, error) {
     vp := viper.New()
-    vp.AddConfigPath("blog-service/configs")
+    vp.AddConfigPath("blog-service/config")
     vp.SetConfigName("config")
     vp.SetConfigType("yaml")
 
@@ -26,4 +26,3 @@ func NewSetting() (*Setting, error) {
 
     return &Setting{vp: vp}, nil
 }
-
