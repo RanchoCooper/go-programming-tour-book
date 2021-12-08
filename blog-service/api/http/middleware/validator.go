@@ -1,4 +1,4 @@
-package embed
+package middleware
 
 import (
     "fmt"

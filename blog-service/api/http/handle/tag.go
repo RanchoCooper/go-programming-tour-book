@@ -1,11 +1,11 @@
-package router
+package handle
 
 import (
     "github.com/gin-gonic/gin"
 
+    "go-programming-tour-book/blog-service/api/http/DTO"
     "go-programming-tour-book/blog-service/api/http/errcode"
-    "go-programming-tour-book/blog-service/api/http/router/embed"
-    "go-programming-tour-book/blog-service/internal/port.adapter/service"
+    "go-programming-tour-book/blog-service/api/http/router"
     "go-programming-tour-book/blog-service/util/logger"
 )
 
@@ -23,7 +23,7 @@ import (
 // @Failure 500 {object} errcode.Error "内部错误"
 // @Router /tags/{id} [get]
 func GetTag(c *gin.Context) {
-    NewResponse(c).ToErrorResponse(errcode.ServerError)
+    router.NewResponse(c).ToErrorResponse(errcode.ServerError)
 }
 
 // ListTag get tag list
@@ -80,9 +80,9 @@ func UpdateTag(c *gin.Context) {
 // @Failure 500 {object} errcode.Error "内部错误"
 // @Router /tags/{id} [delete]
 func DeleteTag(c *gin.Context) {
-    param := service.DeleteTagRequest{}
-    response := NewResponse(c)
-    valid, errs := embed.BindAndValid(c, &param)
+    param := DTO.DeleteTagRequest{}
+    response := router.NewResponse(c)
+    valid, errs := BindAndValid(c, &param)
     if !valid {
         logger.Log.Errorf(c, "app.BindAndValid errs: %v", errs)
         errResp := errcode.InvalidParams.WithDetails(errs.Errors()...)

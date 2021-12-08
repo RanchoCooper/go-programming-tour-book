@@ -1,4 +1,4 @@
-package router
+package handle
 
 import (
     "fmt"
@@ -7,7 +7,7 @@ import (
 
     "go-programming-tour-book/blog-service/api/http/DTO"
     "go-programming-tour-book/blog-service/api/http/errcode"
-    "go-programming-tour-book/blog-service/api/http/router/embed"
+    "go-programming-tour-book/blog-service/api/http/router"
     "go-programming-tour-book/blog-service/internal/port.adapter/service"
     "go-programming-tour-book/blog-service/util/logger"
 )
@@ -19,8 +19,8 @@ import (
 
 func GetAuth(c *gin.Context) {
     param := DTO.AuthRequest{}
-    response := NewResponse(c)
-    valid, errs := embed.BindAndValid(c, &param)
+    response := router.NewResponse(c)
+    valid, errs := BindAndValid(c, &param)
     fmt.Println(param.AppKey)
     fmt.Println(param.AppSecret)
     if !valid {
@@ -37,7 +37,7 @@ func GetAuth(c *gin.Context) {
         return
     }
 
-    token, err := embed.GenerateToken(param.AppKey, param.AppSecret)
+    token, err := GenerateToken(param.AppKey, param.AppSecret)
     if err != nil {
         logger.Log.Errorf(c, "app.GenerateToken err: %v", err)
         response.ToErrorResponse(errcode.UnauthorizedTokenGenerate)

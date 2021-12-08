@@ -1,4 +1,4 @@
-package router
+package handle
 
 import (
     "bytes"
@@ -10,6 +10,7 @@ import (
 
     "github.com/magiconair/properties/assert"
 
+    "go-programming-tour-book/blog-service/api/http/router"
     "go-programming-tour-book/blog-service/internal/port.adapter/service"
 )
 
@@ -36,6 +37,6 @@ func TestGetAuth(t *testing.T) {
         AppSecret: "go-programming-tour-book",
     }
     b, _ := json.Marshal(body)
-    w := performRequest(NewRouter(), http.MethodPost, "/auth", bytes.NewReader(b), "multipart/form-data")
+    w := performRequest(router.NewRouter(), http.MethodPost, "/auth", bytes.NewReader(b), "multipart/form-data")
     assert.Equal(t, http.StatusOK, w.Code)
 }

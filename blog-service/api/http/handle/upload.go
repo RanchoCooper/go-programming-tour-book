@@ -1,10 +1,11 @@
-package router
+package handle
 
 import (
     "github.com/gin-gonic/gin"
     "github.com/spf13/cast"
 
     "go-programming-tour-book/blog-service/api/http/errcode"
+    "go-programming-tour-book/blog-service/api/http/router"
 )
 
 /**
@@ -13,7 +14,7 @@ import (
  */
 
 func UploadFile(c *gin.Context) {
-    response := NewResponse(c)
+    response := router.NewResponse(c)
     _, fileHeader, err := c.Request.FormFile("file")
     fileType := cast.ToInt(c.PostForm("type"))
     if err != nil {
