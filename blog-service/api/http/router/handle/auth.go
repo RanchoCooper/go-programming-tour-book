@@ -7,7 +7,6 @@ import (
 
     "go-programming-tour-book/blog-service/api/http/DTO"
     "go-programming-tour-book/blog-service/api/http/errcode"
-    "go-programming-tour-book/blog-service/api/http/router"
     "go-programming-tour-book/blog-service/internal/port.adapter/service"
     "go-programming-tour-book/blog-service/util/logger"
 )
@@ -19,7 +18,7 @@ import (
 
 func GetAuth(c *gin.Context) {
     param := DTO.AuthRequest{}
-    response := router.NewResponse(c)
+    response := NewResponse(c)
     valid, errs := BindAndValid(c, &param)
     fmt.Println(param.AppKey)
     fmt.Println(param.AppSecret)

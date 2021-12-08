@@ -5,7 +5,6 @@ import (
 
     "go-programming-tour-book/blog-service/api/http/DTO"
     "go-programming-tour-book/blog-service/api/http/errcode"
-    "go-programming-tour-book/blog-service/api/http/router"
     "go-programming-tour-book/blog-service/util/logger"
 )
 
@@ -23,7 +22,7 @@ import (
 // @Failure 500 {object} errcode.Error "内部错误"
 // @Router /tags/{id} [get]
 func GetTag(c *gin.Context) {
-    router.NewResponse(c).ToErrorResponse(errcode.ServerError)
+    NewResponse(c).ToErrorResponse(errcode.ServerError)
 }
 
 // ListTag get tag list
@@ -81,7 +80,7 @@ func UpdateTag(c *gin.Context) {
 // @Router /tags/{id} [delete]
 func DeleteTag(c *gin.Context) {
     param := DTO.DeleteTagRequest{}
-    response := router.NewResponse(c)
+    response := NewResponse(c)
     valid, errs := BindAndValid(c, &param)
     if !valid {
         logger.Log.Errorf(c, "app.BindAndValid errs: %v", errs)
