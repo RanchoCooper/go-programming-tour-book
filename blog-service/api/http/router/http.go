@@ -1,4 +1,4 @@
-package http
+package router
 
 import (
     "context"
@@ -8,7 +8,7 @@ import (
     "github.com/gin-gonic/gin"
 
     "go-programming-tour-book/blog-service/api/http/errcode"
-    "go-programming-tour-book/blog-service/api/http/router"
+    "go-programming-tour-book/blog-service/api/http/router/embed"
     "go-programming-tour-book/blog-service/config"
     "go-programming-tour-book/blog-service/util/logger"
 )
@@ -43,8 +43,8 @@ func (r *Response) ToResponseList(list interface{}, totalRows int64) {
     r.Ctx.JSON(http.StatusOK, gin.H{
         "list": list,
         "pager": Pager{
-            Page:      GetPage(r.Ctx),
-            PageSize:  GetPageSize(r.Ctx),
+            Page:      embed.GetPage(r.Ctx),
+            PageSize:  embed.GetPageSize(r.Ctx),
             TotalRows: totalRows,
         },
     })
@@ -63,7 +63,7 @@ func (r *Response) ToErrorResponse(err *errcode.Error) {
 
 func NewHTTPServer() {
     gin.SetMode(config.Config.Server.RunMode)
-    r := router.NewRouter()
+    r := NewRouter()
 
     s := &http.Server{
         Addr:           ":" + config.Config.Server.HTTPPort,

@@ -4,8 +4,6 @@ import (
     "errors"
 
     "gorm.io/gorm"
-
-    "go-programming-tour-book/blog-service/api/http"
 )
 
 /**
@@ -17,11 +15,6 @@ type Tag struct {
     gorm.Model
     Name  string `json:"name"`
     State uint8  `json:"state"`
-}
-
-type TagSwagger struct {
-    List  []*Tag
-    Pager *http.Pager
 }
 
 func (t Tag) TableName() string {

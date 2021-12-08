@@ -5,9 +5,9 @@ import (
 
     "github.com/gin-gonic/gin"
 
-    "go-programming-tour-book/blog-service/api/http"
     "go-programming-tour-book/blog-service/api/http/DTO"
     "go-programming-tour-book/blog-service/api/http/errcode"
+    "go-programming-tour-book/blog-service/api/http/router/embed"
     "go-programming-tour-book/blog-service/internal/port.adapter/service"
     "go-programming-tour-book/blog-service/util/logger"
 )
@@ -19,8 +19,8 @@ import (
 
 func GetAuth(c *gin.Context) {
     param := DTO.AuthRequest{}
-    response := http.NewResponse(c)
-    valid, errs := http.BindAndValid(c, &param)
+    response := NewResponse(c)
+    valid, errs := embed.BindAndValid(c, &param)
     fmt.Println(param.AppKey)
     fmt.Println(param.AppSecret)
     if !valid {
@@ -37,7 +37,7 @@ func GetAuth(c *gin.Context) {
         return
     }
 
-    token, err := http.GenerateToken(param.AppKey, param.AppSecret)
+    token, err := embed.GenerateToken(param.AppKey, param.AppSecret)
     if err != nil {
         logger.Log.Errorf(c, "app.GenerateToken err: %v", err)
         response.ToErrorResponse(errcode.UnauthorizedTokenGenerate)

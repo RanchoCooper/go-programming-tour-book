@@ -4,7 +4,6 @@ import (
     "github.com/gin-gonic/gin"
     "github.com/spf13/cast"
 
-    "go-programming-tour-book/blog-service/api/http"
     "go-programming-tour-book/blog-service/api/http/errcode"
 )
 
@@ -14,7 +13,7 @@ import (
  */
 
 func UploadFile(c *gin.Context) {
-    response := http.NewResponse(c)
+    response := NewResponse(c)
     _, fileHeader, err := c.Request.FormFile("file")
     fileType := cast.ToInt(c.PostForm("type"))
     if err != nil {
