@@ -9,29 +9,22 @@ import (
  * @date 2021/11/26
  */
 
-type Article struct {
-}
-
-func NewArticle() Article {
-    return Article{}
-}
-
-func (a Article) Get(c *gin.Context) {
+func GetArticle(c *gin.Context) {
 
 }
 
-func (a Article) List(c *gin.Context) {
+func ListArticle(c *gin.Context) {
 
 }
 
-func (a Article) Create(c *gin.Context) {
+func CreateArticle(c *gin.Context) {
 
 }
 
-func (a Article) Update(c *gin.Context) {
+func UpdateArticle(c *gin.Context) {
 
 }
 
-func (a Article) Delete(c *gin.Context) {
+func DeleteArticle(c *gin.Context) {
 
 }

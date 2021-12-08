@@ -13,14 +13,7 @@ import (
  * @date 2021/11/30
  */
 
-type Upload struct {
-}
-
-func NewUpload() Upload {
-    return Upload{}
-}
-
-func (u Upload) UploadFile(c *gin.Context) {
+func UploadFile(c *gin.Context) {
     response := http.NewResponse(c)
     _, fileHeader, err := c.Request.FormFile("file")
     fileType := cast.ToInt(c.PostForm("type"))

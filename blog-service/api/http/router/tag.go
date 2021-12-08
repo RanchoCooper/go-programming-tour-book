@@ -14,14 +14,7 @@ import (
  * @date 2021/11/26
  */
 
-type Tag struct {
-}
-
-func NewTag() Tag {
-    return Tag{}
-}
-
-// Get get a single tag list
+// GetTag get a single tag list
 // @Summary 获取单个标签
 // @Produce json
 // @Param id path int true "标签ID"
@@ -29,11 +22,11 @@ func NewTag() Tag {
 // @Failure 400 {object} errcode.Error "请求错误"
 // @Failure 500 {object} errcode.Error "内部错误"
 // @Router /tags/{id} [get]
-func (t Tag) Get(c *gin.Context) {
+func GetTag(c *gin.Context) {
     http.NewResponse(c).ToErrorResponse(errcode.ServerError)
 }
 
-// List get tag list
+// ListTag get tag list
 // @Summary 获取多个标签
 // @Produce json
 // @Param name query string false "标签名称" maxlength(100)
@@ -44,11 +37,11 @@ func (t Tag) Get(c *gin.Context) {
 // @Failure 400 {object} errcode.Error "请求错误"
 // @Failure 500 {object} errcode.Error "内部错误"
 // @Router /tags [get]
-func (t Tag) List(c *gin.Context) {
+func ListTag(c *gin.Context) {
     return
 }
 
-// Create create a tag
+// CreateTag create a tag
 // @Summary 新增标签
 // @Produce json
 // @Param name body string true "标签名称" minlength(3) maxlength(100)
@@ -58,11 +51,11 @@ func (t Tag) List(c *gin.Context) {
 // @Failure 400 {object} errcode.Error "请求错误"
 // @Failure 500 {object} errcode.Error "内部错误"
 // @Router /tags [post]
-func (t Tag) Create(c *gin.Context) {
+func CreateTag(c *gin.Context) {
     return
 }
 
-// Update update a tag
+// UpdateTag update a tag
 // @Summary 更新标签
 // @Produce json
 // @Param id path int true "标签ID"
@@ -73,12 +66,12 @@ func (t Tag) Create(c *gin.Context) {
 // @Failure 400 {object} errcode.Error "请求错误"
 // @Failure 500 {object} errcode.Error "内部错误"
 // @Router /tags/{id} [put]
-func (t Tag) Update(c *gin.Context) {
+func UpdateTag(c *gin.Context) {
 
     return
 }
 
-// Delete delete a tag
+// DeleteTag delete a tag
 // @Summary 删除标签
 // @Produce json
 // @Param id path int true "标签ID"
@@ -86,7 +79,7 @@ func (t Tag) Update(c *gin.Context) {
 // @Failure 400 {object} errcode.Error "请求错误"
 // @Failure 500 {object} errcode.Error "内部错误"
 // @Router /tags/{id} [delete]
-func (t Tag) Delete(c *gin.Context) {
+func DeleteTag(c *gin.Context) {
     param := service.DeleteTagRequest{}
     response := http.NewResponse(c)
     valid, errs := http.BindAndValid(c, &param)

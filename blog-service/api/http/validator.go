@@ -15,6 +15,10 @@ import (
  * @date 2021/11/28
  */
 
+func init() {
+    binding.Validator = NewCustomValidator()
+}
+
 var _ binding.StructValidator = &CustomValidator{}
 
 type CustomValidator struct {
