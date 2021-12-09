@@ -44,12 +44,12 @@ func NewRouter() *gin.Engine {
         apiV1.GET("/tags/:id", handle2.GetTag)
 
         // articles
-        apiV1.POST("/articles", handle2.CreateTag)
-        apiV1.DELETE("/articles/:id", handle2.DeleteTag)
-        apiV1.PUT("/articles/:id", handle2.UpdateTag)
-        apiV1.PATCH("/articles/:id/state", handle2.UpdateTag)
-        apiV1.GET("/articles/:id", handle2.ListTag)
-        apiV1.GET("/articles", handle2.GetTag)
+        apiV1.POST("/articles", handle2.CreateArticle)
+        apiV1.DELETE("/articles/:id", handle2.DeleteArticle)
+        apiV1.PUT("/articles/:id", handle2.UpdateArticle)
+        apiV1.PATCH("/articles/:id/state", handle2.UpdateArticle)
+        apiV1.GET("/articles/:id", handle2.ListArticle)
+        apiV1.GET("/articles", handle2.GetArticle)
     }
 
     return r

@@ -2,11 +2,11 @@ package handle
 
 import (
     "github.com/gin-gonic/gin"
+    "github.com/spf13/cast"
 
     "go-programming-tour-book/blog-service/api/http/DTO"
     "go-programming-tour-book/blog-service/api/http/errcode"
     "go-programming-tour-book/blog-service/internal/domain.model/tag"
-    "go-programming-tour-book/blog-service/internal/port.adapter/repository"
     "go-programming-tour-book/blog-service/util/logger"
 )
 
@@ -24,7 +24,17 @@ import (
 // @Failure 500 {object} errcode.Error "内部错误"
 // @Router /tags/{id} [get]
 func GetTag(c *gin.Context) {
-    NewResponse(c).ToErrorResponse(errcode.ServerError)
+    response := NewResponse(c)
+    t := &tag.Tag{
+        ID: cast.ToUint(c.Param("id")),
+    }
+    t, err := t.GetTag()
+    if err != nil {
+        logger.Log.Errorf(c, "domain.GetTag err: %v", err.Error())
+        response.ToErrorResponse(errcode.DBError)
+    }
+    response.ToResponse(t)
+    return
 }
 
 // ListTag get tag list
@@ -52,16 +62,16 @@ func ListTag(c *gin.Context) {
         PageSize:   GetPageSize(c),
         PageOffset: GetPageOffset(GetPage(c), GetPageSize(c)),
     }
-    t := &tag.Tag{Name: param.Name, State: param.State}
-    totalRows, err := repository.MySQL.Tag.CountTag(t)
+    t := &tag.Tag{Name: param.Name, State: &param.State}
+    totalRows, err := t.CountTag()
     if err != nil {
-        logger.Log.Errorf(c, "repository.CountTag errs: %v", errs.Errors())
+        logger.Log.Errorf(c, "domain.CountTag err: %v", err.Error())
         response.ToErrorResponse(errcode.DBError)
         return
     }
-    tags, err := repository.MySQL.Tag.GetTagList(t, pager.PageOffset, pager.PageSize)
+    tags, err := t.GetTagList(pager.PageOffset, pager.PageSize)
     if err != nil {
-        logger.Log.Errorf(c, "repository.GetTagList err: %v", errs.Error())
+        logger.Log.Errorf(c, "domain.GetTagList err: %v", err.Error())
         response.ToErrorResponse(errcode.DBError)
         return
     }
@@ -80,6 +90,26 @@ func ListTag(c *gin.Context) {
 // @Failure 500 {object} errcode.Error "内部错误"
 // @Router /tags [post]
 func CreateTag(c *gin.Context) {
+    param := DTO.CreateTagRequest{}
+    valid, errs := BindAndValid(c, &param)
+    response := NewResponse(c)
+    if !valid {
+        logger.Log.Errorf(c, "BindAndValid errs: %v", errs.Errors())
+        response.ToErrorResponse(errcode.InvalidParams.WithDetails(errs.Errors()...))
+        return
+    }
+    t := &tag.Tag{
+        Name:      param.Name,
+        State:     &param.State,
+        CreatedBy: param.CreatedBy,
+    }
+    t, err := t.CreateTag()
+    if err != nil {
+        logger.Log.Errorf(c, "domain.CreateTag err: %v", err.Error())
+        response.ToErrorResponse(errcode.DBError)
+        return
+    }
+    response.ToResponse(t)
     return
 }
 
@@ -95,7 +125,27 @@ func CreateTag(c *gin.Context) {
 // @Failure 500 {object} errcode.Error "内部错误"
 // @Router /tags/{id} [put]
 func UpdateTag(c *gin.Context) {
-
+    response := NewResponse(c)
+    param := DTO.UpdateTagRequest{}
+    valid, errs := BindAndValid(c, &param)
+    if !valid {
+        logger.Log.Errorf(c, "BindAndValid errs: %v", errs.Errors())
+        response.ToErrorResponse(errcode.InvalidParams.WithDetails(errs.Errors()...))
+        return
+    }
+    t := &tag.Tag{
+        ID:        cast.ToUint(c.Param("id")),
+        Name:      param.Name,
+        State:     &param.State,
+        CreatedBy: param.ModifiedBy,
+    }
+    err := t.UpdateTag()
+    if err != nil {
+        logger.Log.Errorf(c, "domain.UpdateTag err: %v", err.Error())
+        response.ToErrorResponse(errcode.DBError)
+        return
+    }
+    response.ToResponse(t)
     return
 }
 
@@ -115,6 +165,15 @@ func DeleteTag(c *gin.Context) {
         logger.Log.Errorf(c, "app.BindAndValid errs: %v", errs)
         errResp := errcode.InvalidParams.WithDetails(errs.Errors()...)
         response.ToErrorResponse(errResp)
+        return
+    }
+    t := &tag.Tag{
+        ID: uint(param.ID),
+    }
+    err := t.DeleteTag()
+    if err != nil {
+        logger.Log.Errorf(c, "domain.DeleteTag err: %v", err.Error())
+        response.ToErrorResponse(errcode.DBError)
         return
     }
 
