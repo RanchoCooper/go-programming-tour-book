@@ -20,9 +20,10 @@ import (
 var MySQL *MySQLRepository
 
 type MySQLRepository struct {
-    db   *gorm.DB
-    Auth *mysql.AuthRepo
-    Tag  *mysql.TagRepo
+    db      *gorm.DB
+    Auth    *mysql.AuthRepo
+    Tag     *mysql.TagRepo
+    Article *mysql.ArticleRepo
 }
 
 func init() {
@@ -60,9 +61,10 @@ func NewMySQLRepository() *MySQLRepository {
     sqlDB.SetMaxOpenConns(config.Config.Database.MaxOpenConns)
 
     MySQL = &MySQLRepository{
-        db:   db,
-        Auth: mysql.NewAuthRepository(db),
-        Tag:  mysql.NewTagRepository(db),
+        db:      db,
+        Auth:    mysql.NewAuthRepository(db),
+        Tag:     mysql.NewTagRepository(db),
+        Article: mysql.NewArticleRepository(db),
     }
 
     return MySQL
