@@ -18,9 +18,10 @@ type Response struct {
 }
 
 type Pager struct {
-    Page      int   `json:"page"`
-    PageSize  int   `json:"page_size"`
-    TotalRows int64 `json:"total_rows"`
+    Page       int   `json:"page"`
+    PageSize   int   `json:"page_size"`
+    PageOffset int   `json:"-"`
+    TotalRows  int64 `json:"total_rows"`
 }
 
 func NewResponse(ctx *gin.Context) *Response {

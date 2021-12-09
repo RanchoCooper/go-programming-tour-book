@@ -5,6 +5,8 @@ import (
 
     "go-programming-tour-book/blog-service/api/http/DTO"
     "go-programming-tour-book/blog-service/api/http/errcode"
+    "go-programming-tour-book/blog-service/internal/domain.model/tag"
+    "go-programming-tour-book/blog-service/internal/port.adapter/repository"
     "go-programming-tour-book/blog-service/util/logger"
 )
 
@@ -37,6 +39,33 @@ func GetTag(c *gin.Context) {
 // @Failure 500 {object} errcode.Error "内部错误"
 // @Router /tags [get]
 func ListTag(c *gin.Context) {
+    param := DTO.TagListRequest{}
+    valid, errs := BindAndValid(c, &param)
+    response := NewResponse(c)
+    if !valid {
+        logger.Log.Errorf(c, "BindAndValid errs: %v", errs.Errors())
+        response.ToErrorResponse(errcode.InvalidParams.WithDetails(errs.Errors()...))
+        return
+    }
+    pager := Pager{
+        Page:       GetPage(c),
+        PageSize:   GetPageSize(c),
+        PageOffset: GetPageOffset(GetPage(c), GetPageSize(c)),
+    }
+    t := &tag.Tag{Name: param.Name, State: param.State}
+    totalRows, err := repository.MySQL.Tag.CountTag(t)
+    if err != nil {
+        logger.Log.Errorf(c, "repository.CountTag errs: %v", errs.Errors())
+        response.ToErrorResponse(errcode.DBError)
+        return
+    }
+    tags, err := repository.MySQL.Tag.GetTagList(t, pager.PageOffset, pager.PageSize)
+    if err != nil {
+        logger.Log.Errorf(c, "repository.GetTagList err: %v", errs.Error())
+        response.ToErrorResponse(errcode.DBError)
+        return
+    }
+    response.ToResponseList(tags, totalRows)
     return
 }
 

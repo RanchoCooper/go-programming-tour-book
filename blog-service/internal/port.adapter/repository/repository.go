@@ -5,6 +5,7 @@ import (
 
     driver "gorm.io/driver/mysql"
     "gorm.io/gorm"
+    "gorm.io/gorm/logger"
     "gorm.io/gorm/schema"
 
     "go-programming-tour-book/blog-service/config"
@@ -19,8 +20,9 @@ import (
 var MySQL *MySQLRepository
 
 type MySQLRepository struct {
-    Auth *mysql.AuthRepo
     db   *gorm.DB
+    Auth *mysql.AuthRepo
+    Tag  *mysql.TagRepo
 }
 
 func init() {
@@ -34,7 +36,7 @@ func NewMySQLRepository() *MySQLRepository {
         config.Config.Database.UserName,
         config.Config.Database.Password,
         config.Config.Database.Host,
-        config.Config.Database.DBType,
+        config.Config.Database.DBName,
         config.Config.Database.Charset,
         config.Config.Database.ParseTime,
         config.Config.Database.TimeZone,
@@ -44,6 +46,7 @@ func NewMySQLRepository() *MySQLRepository {
         NamingStrategy: schema.NamingStrategy{
             SingularTable: true,
         },
+        Logger: logger.Default.LogMode(logger.Info),
     })
     if err != nil {
         panic("init DB fail, err: " + err.Error())
@@ -57,8 +60,9 @@ func NewMySQLRepository() *MySQLRepository {
     sqlDB.SetMaxOpenConns(config.Config.Database.MaxOpenConns)
 
     MySQL = &MySQLRepository{
-        Auth: mysql.NewAuthRepository(db),
         db:   db,
+        Auth: mysql.NewAuthRepository(db),
+        Tag:  mysql.NewTagRepository(db),
     }
 
     return MySQL

@@ -13,6 +13,9 @@ CREATE TABLE IF NOT EXISTS `blog_tag` (
     `modified_by` VARCHAR(100) DEFAULT '' COMMENT '修改人',
     `deleted_on` INT(10) UNSIGNED DEFAULT '0' COMMENT '删除时间',
     `is_del` TINYINT(3) UNSIGNED DEFAULT '0' COMMENT '是否删除 0: 未删除, 1: 已删除',
+    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'created at',
+    `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'updated at',
+    `deleted_at` DATETIME COMMENT 'deleted at',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COMMENT = '标签表';
 
@@ -29,6 +32,9 @@ CREATE TABLE IF NOT EXISTS `blog_article` (
     `modified_by` VARCHAR(100) DEFAULT '' COMMENT '修改人',
     `deleted_on` INT(10) UNSIGNED DEFAULT '0' COMMENT '删除时间',
     `is_del` TINYINT(3) UNSIGNED DEFAULT '0' COMMENT '是否删除 0: 未删除, 1: 已删除',
+    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'created at',
+    `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'updated at',
+    `deleted_at` DATETIME COMMENT 'deleted at',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COMMENT = '文章表';
 
