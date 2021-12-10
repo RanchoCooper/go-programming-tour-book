@@ -11,15 +11,6 @@ import (
  * @date 2021/11/28
  */
 
-type ITag interface {
-    CreateTag(*tag.Tag) (*tag.Tag, error)
-    DeleteTag(*tag.Tag) error
-    UpdateTag(where map[string]interface{}, update map[string]interface{}) error
-    GetTag(*tag.Tag) (*tag.Tag, error)
-    GetTagList(*tag.Tag, int, int) ([]*tag.Tag, error)
-    CountTag(*tag.Tag) (int64, error)
-}
-
 type TagRepo struct {
     db *gorm.DB
 }
@@ -62,7 +53,7 @@ func (tr TagRepo) CountTag(t *tag.Tag) (int64, error) {
     return count, err
 }
 
-var _ ITag = &TagRepo{}
+var _ tag.ITag = &TagRepo{}
 
 func NewTagRepository(db *gorm.DB) *TagRepo {
     return &TagRepo{

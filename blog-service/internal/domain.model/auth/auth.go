@@ -11,6 +11,10 @@ import (
  * @date 2021/12/7
  */
 
+type IAuth interface {
+    GetAuth(string, string) (Auth, error)
+}
+
 type Auth struct {
     gorm.Model
     AppKey    string `gorm:"column:app_key" json:"app_key"`

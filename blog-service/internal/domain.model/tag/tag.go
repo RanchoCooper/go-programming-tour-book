@@ -13,6 +13,15 @@ import (
  * @date 2021/11/26
  */
 
+type ITag interface {
+    CreateTag(*Tag) (*Tag, error)
+    DeleteTag(*Tag) error
+    UpdateTag(where map[string]interface{}, update map[string]interface{}) error
+    GetTag(*Tag) (*Tag, error)
+    GetTagList(*Tag, int, int) ([]*Tag, error)
+    CountTag(*Tag) (int64, error)
+}
+
 type Tag struct {
     ID        uint   `gorm:"primarykey"`
     Name      string `json:"name"`

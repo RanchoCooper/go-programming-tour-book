@@ -11,6 +11,15 @@ import (
  * @date 2021/11/26
  */
 
+type IArticle interface {
+    CreateArticle(*Article) (*Article, error)
+    DeleteArticle(*Article) error
+    UpdateArticle(where map[string]interface{}, update map[string]interface{}) error
+    GetArticle(*Article) (*Article, error)
+    GetArticleList(*Article, int, int) ([]*Article, error)
+    CountArticle(*Article) (int64, error)
+}
+
 type Article struct {
     gorm.Model
     Title         string `json:"title"`

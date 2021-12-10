@@ -13,10 +13,6 @@ import (
  * @date 2021/12/7
  */
 
-type IAuth interface {
-    GetAuth(string, string) (auth.Auth, error)
-}
-
 type AuthRepo struct {
     db *gorm.DB
 }
