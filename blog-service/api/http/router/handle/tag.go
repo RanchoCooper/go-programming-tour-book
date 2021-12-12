@@ -7,6 +7,7 @@ import (
     "go-programming-tour-book/blog-service/api/http/DTO"
     "go-programming-tour-book/blog-service/api/http/errcode"
     "go-programming-tour-book/blog-service/internal/domain.model/tag"
+    "go-programming-tour-book/blog-service/internal/port.adapter/repository"
     "go-programming-tour-book/blog-service/util/logger"
 )
 
@@ -28,7 +29,7 @@ func GetTag(c *gin.Context) {
     t := &tag.Tag{
         ID: cast.ToUint(c.Param("id")),
     }
-    t, err := t.GetTag()
+    t, err := repository.MySQL.Tag.GetTag(t)
     if err != nil {
         logger.Log.Errorf(c, "domain.GetTag err: %v", err.Error())
         response.ToErrorResponse(errcode.DBError)
@@ -63,13 +64,13 @@ func ListTag(c *gin.Context) {
         PageOffset: GetPageOffset(GetPage(c), GetPageSize(c)),
     }
     t := &tag.Tag{Name: param.Name, State: &param.State}
-    totalRows, err := t.CountTag()
+    totalRows, err := repository.MySQL.Tag.CountTag(t)
     if err != nil {
         logger.Log.Errorf(c, "domain.CountTag err: %v", err.Error())
         response.ToErrorResponse(errcode.DBError)
         return
     }
-    tags, err := t.GetTagList(pager.PageOffset, pager.PageSize)
+    tags, err := repository.MySQL.Tag.GetTagList(t, pager.PageOffset, pager.PageSize)
     if err != nil {
         logger.Log.Errorf(c, "domain.GetTagList err: %v", err.Error())
         response.ToErrorResponse(errcode.DBError)
@@ -103,7 +104,7 @@ func CreateTag(c *gin.Context) {
         State:     &param.State,
         CreatedBy: param.CreatedBy,
     }
-    t, err := t.CreateTag()
+    t, err := repository.MySQL.Tag.CreateTag(t)
     if err != nil {
         logger.Log.Errorf(c, "domain.CreateTag err: %v", err.Error())
         response.ToErrorResponse(errcode.DBError)
@@ -139,12 +140,12 @@ func UpdateTag(c *gin.Context) {
         State:     &param.State,
         CreatedBy: param.ModifiedBy,
     }
-    err := t.UpdateTag()
-    if err != nil {
-        logger.Log.Errorf(c, "domain.UpdateTag err: %v", err.Error())
-        response.ToErrorResponse(errcode.DBError)
-        return
-    }
+    // err := repository.MySQL.Tag.UpdateTag(t)
+    // if err != nil {
+    //     logger.Log.Errorf(c, "domain.UpdateTag err: %v", err.Error())
+    //     response.ToErrorResponse(errcode.DBError)
+    //     return
+    // }
     response.ToResponse(t)
     return
 }
@@ -170,7 +171,7 @@ func DeleteTag(c *gin.Context) {
     t := &tag.Tag{
         ID: uint(param.ID),
     }
-    err := t.DeleteTag()
+    err := repository.MySQL.Tag.DeleteTag(t)
     if err != nil {
         logger.Log.Errorf(c, "domain.DeleteTag err: %v", err.Error())
         response.ToErrorResponse(errcode.DBError)

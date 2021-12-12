@@ -13,6 +13,10 @@ import (
  * @date 2021/12/7
  */
 
+type IAuth interface {
+    GetAuth(string, string) (*auth.Auth, error)
+}
+
 type AuthRepo struct {
     db *gorm.DB
 }
@@ -35,3 +39,5 @@ func (a *AuthRepo) GetAuth(appKey, appSecret string) (*auth.Auth, error) {
 
     return auth, nil
 }
+
+var _ IAuth = &AuthRepo{}

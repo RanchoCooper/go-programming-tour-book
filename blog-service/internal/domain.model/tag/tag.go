@@ -4,23 +4,12 @@ import (
     "time"
 
     "gorm.io/gorm"
-
-    "go-programming-tour-book/blog-service/internal/port.adapter/repository"
 )
 
 /**
  * @author Rancho
  * @date 2021/11/26
  */
-
-type ITag interface {
-    CreateTag(*Tag) (*Tag, error)
-    DeleteTag(*Tag) error
-    UpdateTag(where map[string]interface{}, update map[string]interface{}) error
-    GetTag(*Tag) (*Tag, error)
-    GetTagList(*Tag, int, int) ([]*Tag, error)
-    CountTag(*Tag) (int64, error)
-}
 
 type Tag struct {
     ID        uint   `gorm:"primarykey"`
@@ -34,41 +23,4 @@ type Tag struct {
 
 func (t Tag) TableName() string {
     return "blog_tag"
-}
-
-func (t *Tag) GetTag() (*Tag, error) {
-    return repository.MySQL.Tag.GetTag(t)
-}
-
-func (t *Tag) CountTag() (int64, error) {
-    return repository.MySQL.Tag.CountTag(t)
-}
-
-func (t *Tag) GetTagList(offset, limit int) ([]*Tag, error) {
-    return repository.MySQL.Tag.GetTagList(t, offset, limit)
-}
-
-func (t *Tag) CreateTag() (*Tag, error) {
-    return repository.MySQL.Tag.CreateTag(t)
-}
-
-func (t *Tag) UpdateTag() error {
-    where := map[string]interface{}{
-        "id": t.ID,
-    }
-    var update map[string]interface{}
-    if t.Name != "" {
-        update["name"] = t.Name
-    }
-    if t.CreatedBy != "" {
-        update["created_by"] = t.CreatedBy
-    }
-    if t.State != nil {
-        update["state"] = t.State
-    }
-    return repository.MySQL.Tag.UpdateTag(where, update)
-}
-
-func (t *Tag) DeleteTag() error {
-    return repository.MySQL.Tag.DeleteTag(t)
 }
