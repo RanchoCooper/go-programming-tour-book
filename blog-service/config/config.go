@@ -26,10 +26,12 @@ type appConfig struct {
 }
 
 type httpServerConfig struct {
-    Addr         string `yaml:"addr"`
-    Pprof        bool   `yaml:"pprof"`
-    ReadTimeout  string `yaml:"read_timeout"`
-    WriteTimeout string `yaml:"write_timeout"`
+    Addr            string `yaml:"addr"`
+    Pprof           bool   `yaml:"pprof"`
+    DefaultPageSize int    `yaml:"default_page_size"`
+    MaxPageSize     int    `yaml:"max_page_size"`
+    ReadTimeout     string `yaml:"read_timeout"`
+    WriteTimeout    string `yaml:"write_timeout"`
 }
 
 type logConfig struct {

@@ -5,6 +5,8 @@ app:
 http_server:
   addr: ":3000"
   pprof: false
+  default_page_size: 10
+  max_page_size: 100
   read_timeout: "60s"
   write_timeout: "60s"
 log:
