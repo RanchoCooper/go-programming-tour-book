@@ -2,6 +2,11 @@ package handle
 
 import (
     "github.com/gin-gonic/gin"
+
+    "blog-service/api/http/dto"
+    "blog-service/api/http/errcode"
+    "blog-service/api/http/validator"
+    "blog-service/util/logger"
 )
 
 /**
@@ -27,6 +32,17 @@ func NewTag() Tag {
 // @Failure 500 {object} errcode.Error "内部错误"
 // @Router /api/v1/tags [get]
 func (t Tag) List(c *gin.Context) {
+    param := dto.TagListRequest{}
+    response := NewResponse(c)
+    valid, errs := validator.BindAndValid(c, &param, c.ShouldBindQuery)
+    if !valid {
+        logger.Log.Errorf(c, "tag.List.BindAndList errs: %v", errs)
+        errResp := errcode.InvalidParams.WithDetails(errs.Errors()...)
+        response.ToErrorResponse(errResp)
+        return
+    }
+
+    response.ToResponse(gin.H{})
 }
 
 // Create

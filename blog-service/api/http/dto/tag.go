@@ -6,13 +6,13 @@ package dto
  */
 
 type CountTagRequest struct {
-    Name  string `json:"name" binding:"max=100"`
-    State uint8  `json:"state" binding:"oneof=0 1"`
+    Name  string `form:"name" binding:"max=100"`
+    State uint8  `form:"state" binding:"oneof=0 1"`
 }
 
 type TagListRequest struct {
-    Name  string `json:"name" binding:"max=100"`
-    State uint8  `json:"state" binding:"oneof=0 1"`
+    Name  string `form:"name" binding:"max=100"`
+    State uint8  `form:"state" binding:"oneof=0 1"`
 }
 
 type CreateTagRequest struct {
@@ -28,5 +28,5 @@ type UpdateTagRequest struct {
 }
 
 type DeleteTagRequest struct {
-    ID uint32 `json:"id" binding:"required,gte=1"`
+    ID uint32 `form:"id" binding:"required,gte=1"`
 }
