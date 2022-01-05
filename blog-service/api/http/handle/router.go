@@ -1,6 +1,8 @@
 package handle
 
 import (
+    "net/http"
+
     "github.com/gin-gonic/gin"
 
     "blog-service/config"
@@ -14,12 +16,40 @@ func NewServerRoute() *gin.Engine {
     }
 
     router := gin.Default()
+
+    router.GET("/ping", func(c *gin.Context) {
+        c.JSON(http.StatusOK, gin.H{"message": "pong"})
+
+    })
+
     example := router.Group("/example")
     {
         example.POST("", CreateExample)
-        // example.DELETE("", handle.DeleteExample)
-        // example.PUT("", handle.UpdateExample)
-        // example.GET("", handle.GetExample)
+    }
+
+    apiv1 := router.Group("/api/v1")
+    {
+        tag := NewTag()
+        // 创建标签
+        apiv1.POST("/tags", tag.Create)
+        // 删除指定标签
+        apiv1.DELETE("/tags/:id", tag.Delete)
+        // 更新指定标签
+        apiv1.PUT("/tags/:id", tag.Update)
+        // 获取标签列表
+        apiv1.GET("/tags", tag.List)
+
+        article := NewArticle()
+        // 创建文章
+        apiv1.POST("/articles", article.Create)
+        // 删除指定文章
+        apiv1.DELETE("/articles/:id", article.Delete)
+        // 更新指定文章
+        apiv1.PUT("/articles/:id", article.Update)
+        // 获取指定文章
+        apiv1.GET("/articles/:id", article.Get)
+        // 获取文章列表
+        apiv1.GET("/articles", article.List)
     }
 
     return router
