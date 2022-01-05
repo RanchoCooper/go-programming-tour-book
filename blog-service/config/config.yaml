@@ -5,6 +5,8 @@ app:
 http_server:
   addr: ":3000"
   pprof: false
+  read_timeout: "60s"
+  write_timeout: "60s"
 log:
   log_save_path: /tmp/logs
   log_file_name: ""     # FIXME

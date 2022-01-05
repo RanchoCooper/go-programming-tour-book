@@ -26,8 +26,10 @@ type appConfig struct {
 }
 
 type httpServerConfig struct {
-    Addr  string `yaml:"addr"`
-    Pprof bool   `yaml:"pprof"`
+    Addr         string `yaml:"addr"`
+    Pprof        bool   `yaml:"pprof"`
+    ReadTimeout  string `yaml:"read_timeout"`
+    WriteTimeout string `yaml:"write_timeout"`
 }
 
 type logConfig struct {
