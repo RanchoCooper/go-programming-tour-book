@@ -5,7 +5,7 @@ import (
 
     "github.com/jinzhu/copier"
 
-    "blog-service/internal/domain.model/dto"
+    "blog-service/api/http/dto"
     "blog-service/internal/domain.model/repo"
     "blog-service/internal/port.adapter/repository"
     "blog-service/util/logger"

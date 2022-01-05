@@ -5,7 +5,7 @@ import (
 
     "github.com/stretchr/testify/assert"
 
-    "blog-service/internal/domain.model/dto"
+    "blog-service/api/http/dto"
 )
 
 /**

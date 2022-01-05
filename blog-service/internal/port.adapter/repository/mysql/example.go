@@ -4,7 +4,7 @@ import (
     "context"
     "errors"
 
-    "blog-service/internal/domain.model/dto"
+    "blog-service/api/http/dto"
     "blog-service/internal/domain.model/entity"
     "blog-service/internal/domain.model/repo"
 )
