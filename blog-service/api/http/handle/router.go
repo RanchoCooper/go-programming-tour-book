@@ -5,6 +5,7 @@ import (
 
     "github.com/gin-gonic/gin"
 
+    "blog-service/api/http/middleware"
     "blog-service/config"
 )
 
@@ -16,6 +17,7 @@ func NewServerRoute() *gin.Engine {
     }
 
     router := gin.Default()
+    router.Use(middleware.Translations())
 
     router.GET("/ping", func(c *gin.Context) {
         c.JSON(http.StatusOK, gin.H{"message": "pong"})
