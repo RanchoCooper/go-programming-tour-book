@@ -2,34 +2,51 @@ package main
 
 import (
     "context"
+    "fmt"
     "os"
     "os/signal"
     "syscall"
-    "time"
 
-    "go-programming-tour-book/blog-service/api/http/router"
-    "go-programming-tour-book/blog-service/util/logger"
+    "blog-service/cmd/http_server"
+    "blog-service/config"
+    "blog-service/internal/port.adapter/repository"
+    "blog-service/util/logger"
 )
 
-/**
- * @author Rancho
- * @date 2021/11/26
- */
-
-// @title 博客系统
-// @version 1.0
-// @description Go语言编程之旅
 func main() {
-    ctx := context.Background()
-    go router.NewHTTPServer(ctx)
+    ctx, cancel := context.WithCancel(context.Background())
+    initConfig()
+    initRuntime(ctx)
+    initServer(ctx, cancel)
+}
+
+func initConfig() {
+    config.Init()
+}
+
+func initRuntime(ctx context.Context) {
+    repository.Init(
+        repository.WithMySQL(ctx),
+        repository.WithRedis(ctx),
+    )
+}
+
+func initServer(ctx context.Context, cancel context.CancelFunc) {
+    errCh := make(chan error)
+    httpCloseCh := make(chan struct{})
+    http_server.Start(ctx, errCh, httpCloseCh)
 
     // graceful shutdown
-    quit := make(chan os.Signal)
-    signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
-    <-quit
-    logger.Log.Info(ctx, "shutdown server...")
-    ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
-    defer cancel()
-    router.Shutdown(ctx)
-    logger.Log.Info(ctx, "server exit")
+    quit := make(chan os.Signal, 1)
+    signal.Notify(quit, os.Interrupt, syscall.SIGTERM)
+    select {
+    case <-quit:
+        cancel()
+        logger.Log.Info(ctx, "Start graceful shutdown")
+    case err := <-errCh:
+        cancel()
+        logger.Log.Error(ctx, fmt.Sprintf("http err:%v", err))
+    }
+    <-httpCloseCh
+    logger.Log.Infof(ctx, "%s HTTP server exit!", config.Config.App.Name)
 }

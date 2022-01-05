@@ -9,16 +9,15 @@ import (
     "runtime"
     "time"
 
-    "github.com/gin-gonic/gin"
     "gopkg.in/natefinch/lumberjack.v2"
 
-    "go-programming-tour-book/blog-service/config"
-    "go-programming-tour-book/blog-service/util"
+    "blog-service/config"
+    "blog-service/util"
 )
 
 /**
  * @author Rancho
- * @date 2021/12/1
+ * @date 2021/12/24
  */
 
 const (
@@ -63,13 +62,14 @@ type Logger struct {
 }
 
 func init() {
-    fileName := util.GetCurrentPath() + "/../.." + config.Config.App.LogSavePath + "/" + config.Config.App.LogFileName + config.Config.App.LogFileExt
+    config.Init()
+    fileName := util.GetCurrentPath() + "/../.." + config.Config.Log.LogSavePath + "/" + config.Config.Log.LogFileName + config.Config.Log.LogFileExt
     Log = NewLogger(&lumberjack.Logger{
         Filename:  fileName,
         MaxSize:   500,
         MaxAge:    10,
         LocalTime: true,
-    }, "", log.LstdFlags).WithCaller(2)
+    }, "", log.LstdFlags)
 }
 
 func NewLogger(w io.Writer, prefix string, flag int) *Logger {
@@ -133,13 +133,13 @@ func (l *Logger) WithCallersFrames() *Logger {
 }
 
 func (l *Logger) WithTrace() *Logger {
-    ginCtx, ok := l.ctx.(*gin.Context)
-    if ok {
-        return l.WithFields(Fields{
-            "trace_id": ginCtx.MustGet("X-Trace-ID"),
-            "span_id":  ginCtx.MustGet("X-Span-ID"),
-        })
-    }
+    // ginCtx, ok := l.ctx.(*gin.Context)
+    // if ok {
+    //     return l.WithFields(Fields{
+    //         "trace_id": ginCtx.MustGet("X-Trace-ID"),
+    //         "span_id":  ginCtx.MustGet("X-Span-ID"),
+    //     })
+    // }
 
     return l
 }

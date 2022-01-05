@@ -1,71 +1,71 @@
 package repository
 
 import (
-    "fmt"
+    "context"
 
-    driver "gorm.io/driver/mysql"
-    "gorm.io/gorm"
-    "gorm.io/gorm/logger"
-    "gorm.io/gorm/schema"
-
-    "go-programming-tour-book/blog-service/config"
-    "go-programming-tour-book/blog-service/internal/port.adapter/repository/mysql"
+    "blog-service/config"
+    "blog-service/internal/port.adapter/repository/mysql"
+    "blog-service/internal/port.adapter/repository/redis"
+    "blog-service/util/logger"
 )
 
-/**
- * @author Rancho
- * @date 2021/12/8
- */
+var (
+    Clients = &client{}
+    Example *mysql.Example
+)
 
-var MySQL *MySQLRepository
-
-type MySQLRepository struct {
-    db      *gorm.DB
-    Auth    *mysql.AuthRepo
-    Tag     *mysql.TagRepo
-    Article *mysql.ArticleRepo
+type client struct {
+    MySQL mysql.IMySQL
+    Redis redis.IRedis
 }
 
-func init() {
-    if MySQL == nil {
-        MySQL = NewMySQLRepository()
+func (c *client) close(ctx context.Context) {
+    if c.MySQL != nil {
+        c.MySQL.Close(ctx)
+    }
+    if c.Redis != nil {
+        c.Redis.Close(ctx)
     }
 }
 
-func NewMySQLRepository() *MySQLRepository {
-    dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=%s&parseTime=%t&loc=%s",
-        config.Config.Database.UserName,
-        config.Config.Database.Password,
-        config.Config.Database.Host,
-        config.Config.Database.DBName,
-        config.Config.Database.Charset,
-        config.Config.Database.ParseTime,
-        config.Config.Database.TimeZone,
-    )
+type Option func(*client)
 
-    db, err := gorm.Open(driver.Open(dsn), &gorm.Config{
-        NamingStrategy: schema.NamingStrategy{
-            SingularTable: true,
-        },
-        Logger: logger.Default.LogMode(logger.Info),
-    })
-    if err != nil {
-        panic("init DB fail, err: " + err.Error())
+func WithMySQL(ctx context.Context) Option {
+    return func(c *client) {
+        if c.MySQL == nil {
+            if config.Config.MySQL != nil {
+                c.MySQL = mysql.NewMySQLClient()
+            } else {
+                panic("init repository with empty MySQL config")
+            }
+        }
+        // inject repository
+        if Example == nil {
+            Example = mysql.NewExampleInstance(Clients.MySQL)
+        }
     }
+}
 
-    sqlDB, err := db.DB()
-    if err != nil {
-        panic("get sqlDB fail, err: " + err.Error())
+func WithRedis(ctx context.Context) Option {
+    return func(c *client) {
+        if c.Redis == nil {
+            if config.Config.Redis != nil {
+                c.Redis = redis.NewRedisClient()
+            } else {
+                panic("init repository with empty Redis config")
+            }
+        }
     }
-    sqlDB.SetMaxIdleConns(config.Config.Database.MaxIdleConns)
-    sqlDB.SetMaxOpenConns(config.Config.Database.MaxOpenConns)
+}
 
-    MySQL = &MySQLRepository{
-        db:      db,
-        Auth:    mysql.NewAuthRepository(db),
-        Tag:     mysql.NewTagRepository(db),
-        Article: mysql.NewArticleRepository(db),
+func Init(opts ...Option) {
+    for _, opt := range opts {
+        opt(Clients)
     }
+    logger.Log.Info(context.Background(), "repository init successfully")
+}
 
-    return MySQL
+func Close(ctx context.Context) {
+    Clients.close(ctx)
+    logger.Log.Info(ctx, "repository is closed.")
 }

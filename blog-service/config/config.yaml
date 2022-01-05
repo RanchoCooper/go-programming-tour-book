@@ -1,44 +1,33 @@
-Server:
-  RunMode: debug
-  HTTPPort: 8888
-  ReadTimeout: 60
-  WriteTimeout: 60
-App:
-  DefaultPageSize: 10
-  MaxPageSize: 100
-  DefaultContextTimeout: 60
-  LogSavePath: blog-service/storage/logs
-  LogFileName: app
-  LogFileExt: .log
-  UploadSavePath: storage/uploads
-  UploadServerUrl: http://127.0.0.1:8888/static
-  UploadImageMaxSize: 5  # MB
-  UploadImageAllowExts:
-    - .jpg
-    - .jpeg
-    - .png
-Email:
-  Host: smtp.qq.com
-  Port: 465
-  UserName: xxx
-  Password: xxx
-  IsSSL: true
-  From: xxx
-  To:
-    - xxx
-JWT:
-  Secret: rancho-cooper
-  Issuer: blog-service
-  Expire: 7200
-Database:
-  DBType: mysql
-  UserName: root
-  Password:
-  Host: 127.0.0.1:3306
-  DBName: blog_service
-  TablePrefix: blog_
-  Charset: utf8
-  ParseTime: True
-  TimeZone: "Asia%2fShanghai"
-  MaxIdleConns: 10
-  MaxOpenConns: 30
+app:
+  name: "go-hexagonal"
+  version: "v0.1.0"
+  debug: true
+http_server:
+  addr: ":3000"
+  pprof: false
+log:
+  log_save_path: /tmp/logs
+  log_file_name: ""     # FIXME
+  log_file_ext: .log
+mysql:
+  user: "root"
+  password: "root"
+  host: "localhost"
+  port: 3306
+  database: "hexagonal"      # FIXME
+  max_idle_conns: 50
+  max_open_conns: 100
+  max_life_time: "36000s"
+  max_idle_time: "3600s"
+  char_set: "utf8mb4"
+  parse_time: true
+  time_zone: "Asia%2fShanghai"
+redis:
+  addr: "localhost:6379"
+  username: ""
+  password: ""
+  db: 0
+  pool_size: 300
+  idle_timeout: 30
+  min_idle_conns: 100
+
