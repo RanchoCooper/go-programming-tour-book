@@ -34,6 +34,12 @@ type httpServerConfig struct {
     WriteTimeout    string `yaml:"write_timeout"`
 }
 
+type jwtConfig struct {
+    Secret string `yaml:"secret"`
+    Issuer string `yaml:"issuer"`
+    Expire int    `yaml:"expire"`
+}
+
 type logConfig struct {
     LogSavePath string `yaml:"log_save_path"`
     LogFileName string `yaml:"log_file_name"`
@@ -68,6 +74,7 @@ type redisConfig struct {
 type config struct {
     App        *appConfig        `yaml:"app"`
     HTTPServer *httpServerConfig `yaml:"http_server"`
+    JWT        *jwtConfig        `yaml:"jwt"`
     Log        *logConfig        `yaml:"log"`
     MySQL      *mysqlConfig      `yaml:"mysql"`
     Redis      *redisConfig      `yaml:"redis"`

@@ -24,6 +24,8 @@ func NewServerRoute() *gin.Engine {
 
     })
 
+    router.GET("/auth", GetAuth)
+
     example := router.Group("/example")
     {
         example.POST("", CreateExample)

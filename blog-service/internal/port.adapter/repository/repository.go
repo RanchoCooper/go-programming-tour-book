@@ -13,6 +13,7 @@ var (
     Clients = &client{}
     Example *mysql.Example
     Tag     *mysql.Tag
+    Auth    *mysql.Auth
 )
 
 type client struct {
@@ -46,6 +47,9 @@ func WithMySQL(ctx context.Context) Option {
         }
         if Tag == nil {
             Tag = mysql.NewTag(Clients.MySQL)
+        }
+        if Auth == nil {
+            Auth = mysql.NewAuth(Clients.MySQL)
         }
     }
 }

@@ -21,9 +21,7 @@ type Tag struct {
 var _ repo.ITagRepo = &Tag{}
 
 func NewTag(mysql IMySQL) *Tag {
-    return &Tag{
-        IMySQL: mysql,
-    }
+    return &Tag{IMySQL: mysql}
 }
 
 func (t *Tag) Create(ctx context.Context, dto dto.CreateTagRequest) (*entity.Tag, error) {
