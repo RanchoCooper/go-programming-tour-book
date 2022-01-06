@@ -24,7 +24,7 @@ func CreateExample(ctx *gin.Context) {
         return
     }
 
-    example, err := service.Service.Create(ctx, body)
+    example, err := service.Service.ExampleService.Create(ctx, body)
     if err != nil {
         logger.Log.Errorf(ctx, "create example failed.%v", err.Error())
         ctx.Abort()

@@ -17,13 +17,17 @@ var (
 
 type DomainService struct {
     *ExampleService
+    *TagService
 }
 
 type DomainServiceOption func(srv *DomainService)
 
 func Init(ctx context.Context) {
     once.Do(func() {
-        Service = NewDomainService(WithExampleService(ctx))
+        Service = NewDomainService(
+            WithExampleService(ctx),
+            WithTagService(ctx),
+        )
     })
 }
 
@@ -39,5 +43,11 @@ func NewDomainService(opts ...DomainServiceOption) *DomainService {
 func WithExampleService(ctx context.Context) DomainServiceOption {
     return func(s *DomainService) {
         s.ExampleService = NewExampleService(ctx)
+    }
+}
+
+func WithTagService(ctx context.Context) DomainServiceOption {
+    return func(s *DomainService) {
+        s.TagService = NewTagService(ctx)
     }
 }

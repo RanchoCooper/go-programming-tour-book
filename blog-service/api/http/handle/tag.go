@@ -6,6 +6,7 @@ import (
     "blog-service/api/http/dto"
     "blog-service/api/http/errcode"
     "blog-service/api/http/validator"
+    "blog-service/internal/domain.model/service"
     "blog-service/util/logger"
 )
 
@@ -36,7 +37,7 @@ func (t Tag) List(c *gin.Context) {
     response := NewResponse(c)
     valid, errs := validator.BindAndValid(c, &param, c.ShouldBindQuery)
     if !valid {
-        logger.Log.Errorf(c, "tag.List.BindAndList errs: %v", errs)
+        logger.Log.Errorf(c, "tagList.BindAndValid errs: %v", errs)
         errResp := errcode.InvalidParams.WithDetails(errs.Errors()...)
         response.ToErrorResponse(errResp)
         return
@@ -56,6 +57,23 @@ func (t Tag) List(c *gin.Context) {
 // @Failure 500 {object} errcode.Error "内部错误"
 // @Router /api/v1/tags [post]
 func (t Tag) Create(c *gin.Context) {
+    body := dto.CreateTagRequest{}
+    response := NewResponse(c)
+    valid, errs := validator.BindAndValid(c, &body, c.ShouldBindJSON)
+    if !valid {
+        logger.Log.Errorf(c, "tagCreate.BindAndValid errs: %v", errs)
+        errResp := errcode.InvalidParams.WithDetails(errs.Errors()...)
+        response.ToErrorResponse(errResp)
+        return
+    }
+    err := service.Service.TagService.Create(c, body)
+    if err != nil {
+        logger.Log.Errorf(c, "tagCreate.create fail, err: %v", err)
+        errResp := errcode.InvalidParams.WithDetails(errs.Errors()...)
+        response.ToErrorResponse(errResp)
+        return
+    }
+    response.ToResponse(gin.H{})
 }
 
 // Update

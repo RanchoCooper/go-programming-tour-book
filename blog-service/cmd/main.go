@@ -9,6 +9,7 @@ import (
 
     "blog-service/cmd/http_server"
     "blog-service/config"
+    "blog-service/internal/domain.model/service"
     "blog-service/internal/port.adapter/repository"
     "blog-service/util/logger"
 )
@@ -29,6 +30,7 @@ func initRuntime(ctx context.Context) {
         repository.WithMySQL(ctx),
         repository.WithRedis(ctx),
     )
+    service.Init(ctx)
 }
 
 func initServer(ctx context.Context, cancel context.CancelFunc) {
