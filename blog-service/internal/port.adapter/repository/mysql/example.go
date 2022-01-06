@@ -14,17 +14,17 @@ import (
  * @date 2021/12/24
  */
 
-func NewExampleInstance(mysql IMySQL) *Example {
-    return &Example{
-        IMySQL: mysql,
-    }
-}
-
 type Example struct {
     IMySQL
 }
 
 var _ repo.IExampleRepo = &Example{}
+
+func NewExample(mysql IMySQL) *Example {
+    return &Example{
+        IMySQL: mysql,
+    }
+}
 
 func (e *Example) Create(ctx context.Context, dto dto.CreateExampleReq) (*entity.Example, error) {
     record := &entity.Example{}

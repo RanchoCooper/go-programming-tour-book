@@ -12,6 +12,7 @@ import (
 var (
     Clients = &client{}
     Example *mysql.Example
+    Tag     *mysql.Tag
 )
 
 type client struct {
@@ -41,7 +42,10 @@ func WithMySQL(ctx context.Context) Option {
         }
         // inject repository
         if Example == nil {
-            Example = mysql.NewExampleInstance(Clients.MySQL)
+            Example = mysql.NewExample(Clients.MySQL)
+        }
+        if Tag == nil {
+            Tag = mysql.NewTag(Clients.MySQL)
         }
     }
 }

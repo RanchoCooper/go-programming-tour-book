@@ -7,10 +7,15 @@ package entity
 
 type Tag struct {
     *Model
-    Name  string `json:"name"`
-    State uint8  `json:"state"`
+    Name      string `json:"name"`
+    State     uint8  `json:"state"`
+    changeMap map[string]interface{}
 }
 
 func (t Tag) TableName() string {
     return "blog_tag"
+}
+
+func (t *Tag) GetChangeMap() map[string]interface{} {
+    return t.changeMap
 }
