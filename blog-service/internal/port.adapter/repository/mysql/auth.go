@@ -29,8 +29,7 @@ func (a *Auth) Get(ctx context.Context, dto *dto.AuthRequest) (*entity.Auth, err
     record := &entity.Auth{}
     record.AppKey = dto.AppKey
     record.AppSecret = dto.AppSecret
-    err := a.GetDB(ctx).
-        Where("app_key = ? AND app_secret = ? AND is_del = 0", record.AppKey, record.AppSecret).
+    err := a.GetDB(ctx).Where("app_key = ? AND app_secret = ? AND is_del = 0", record.AppKey, record.AppSecret).
         First(record).Error
 
     if err != nil && err != gorm.ErrRecordNotFound {
