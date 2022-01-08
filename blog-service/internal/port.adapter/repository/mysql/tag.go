@@ -4,6 +4,8 @@ import (
     "context"
     "errors"
 
+    "github.com/jinzhu/copier"
+
     "blog-service/api/http/dto"
     "blog-service/internal/domain.model/entity"
     "blog-service/internal/domain.model/repo"
@@ -26,10 +28,8 @@ func NewTag(mysql IMySQL) *Tag {
 
 func (t *Tag) Create(ctx context.Context, dto dto.CreateTagRequest) (*entity.Tag, error) {
     record := &entity.Tag{}
-    record.Name = dto.Name
-    record.CreatedBy = dto.CreateBy
-    record.State = dto.State
-    err := t.GetDB(ctx).Create(record).Error
+    _ = copier.Copy(record, dto)
+    err := t.GetDB(ctx).Table(record.TableName()).Create(record).Error
     if err != nil {
         return nil, err
     }
@@ -37,17 +37,17 @@ func (t *Tag) Create(ctx context.Context, dto dto.CreateTagRequest) (*entity.Tag
     return record, nil
 }
 
-func (t *Tag) Delete(ctx context.Context, ID int) error {
+func (t *Tag) Delete(ctx context.Context, ID uint32) error {
     if ID == 0 {
         return errors.New("delete fail. need ID")
     }
-    err := t.GetDB(ctx).Delete(&entity.Tag{}, ID).Error
+    err := t.GetDB(ctx).Table((&entity.Tag{}).TableName()).Delete(&entity.Tag{}, ID).Error
     return err
 }
 
 func (t *Tag) Update(ctx context.Context, entity *entity.Tag) error {
     return t.GetDB(ctx).Table(entity.TableName()).Where("id = ? AND is_del = 0", entity.ID).
-        Updates(entity.GetChangeMap()).Error
+        Updates(entity.ChangeMap).Error
 }
 
 func (t *Tag) GetList(ctx context.Context, entity *entity.Tag, pageOffset, pageSize int) (entities []*entity.Tag, err error) {

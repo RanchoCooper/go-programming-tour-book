@@ -2,6 +2,7 @@ package handle
 
 import (
     "github.com/gin-gonic/gin"
+    "github.com/spf13/cast"
 
     "blog-service/api/http/dto"
     "blog-service/api/http/errcode"
@@ -88,6 +89,25 @@ func (t Tag) Create(c *gin.Context) {
 // @Failure 500 {object} errcode.Error "内部错误"
 // @Router /api/v1/tags/{id} [put]
 func (t Tag) Update(c *gin.Context) {
+    body := dto.UpdateTagRequest{
+        ID: cast.ToUint32(c.Param("id")),
+    }
+    response := NewResponse(c)
+    valid, errs := validator.BindAndValid(c, &body, c.ShouldBindJSON)
+    if !valid {
+        logger.Log.Errorf(c, "tagUpdate.BindAndValid errs: %v", errs)
+        errResp := errcode.InvalidParams.WithDetails(errs.Errors()...)
+        response.ToErrorResponse(errResp)
+        return
+    }
+    err := service.Service.TagService.Update(c, body)
+    if err != nil {
+        logger.Log.Errorf(c, "tagUpdate.update fail, err: %v", err)
+        errResp := errcode.InvalidParams.WithDetails(errs.Errors()...)
+        response.ToErrorResponse(errResp)
+        return
+    }
+    response.ToResponse(gin.H{})
 }
 
 // Delete
@@ -99,4 +119,21 @@ func (t Tag) Update(c *gin.Context) {
 // @Failure 500 {object} errcode.Error "内部错误"
 // @Router /api/v1/tags/{id} [delete]
 func (t Tag) Delete(c *gin.Context) {
+    param := dto.DeleteTagRequest{}
+    response := NewResponse(c)
+    valid, errs := validator.BindAndValid(c, &param, c.ShouldBindUri)
+    if !valid {
+        logger.Log.Errorf(c, "tagUpdate.BindAndValid errs: %v", errs)
+        errResp := errcode.InvalidParams.WithDetails(errs.Errors()...)
+        response.ToErrorResponse(errResp)
+        return
+    }
+    err := service.Service.TagService.Delete(c, param)
+    if err != nil {
+        logger.Log.Errorf(c, "tagDelete.delete fail, err: %v", err)
+        errResp := errcode.InvalidParams
+        response.ToErrorResponse(errResp)
+        return
+    }
+    response.ToResponse(gin.H{})
 }
