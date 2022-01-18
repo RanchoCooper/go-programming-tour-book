@@ -7,7 +7,7 @@ import (
 
     "github.com/spf13/cast"
 
-    http2 "blog-service/api/http/handle"
+    http2 "blog-service/api/http"
     "blog-service/config"
     "blog-service/util/logger"
 )

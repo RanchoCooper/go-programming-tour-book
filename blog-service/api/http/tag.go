@@ -1,4 +1,4 @@
-package handle
+package http
 
 import (
     "github.com/gin-gonic/gin"
@@ -6,6 +6,7 @@ import (
 
     "blog-service/api/http/dto"
     "blog-service/api/http/errcode"
+    "blog-service/api/http/handle"
     "blog-service/api/http/validator"
     "blog-service/internal/domain.model/service"
     "blog-service/util/logger"
@@ -35,7 +36,7 @@ func NewTag() Tag {
 // @Router /api/v1/tags [get]
 func (t Tag) List(c *gin.Context) {
     param := dto.TagListRequest{}
-    response := NewResponse(c)
+    response := handle.NewResponse(c)
     valid, errs := validator.BindAndValid(c, &param, c.ShouldBindQuery)
     if !valid {
         logger.Log.Errorf(c, "tagList.BindAndValid errs: %v", errs)
@@ -59,7 +60,7 @@ func (t Tag) List(c *gin.Context) {
 // @Router /api/v1/tags [post]
 func (t Tag) Create(c *gin.Context) {
     body := dto.CreateTagRequest{}
-    response := NewResponse(c)
+    response := handle.NewResponse(c)
     valid, errs := validator.BindAndValid(c, &body, c.ShouldBindJSON)
     if !valid {
         logger.Log.Errorf(c, "tagCreate.BindAndValid errs: %v", errs)
@@ -92,7 +93,7 @@ func (t Tag) Update(c *gin.Context) {
     body := dto.UpdateTagRequest{
         ID: cast.ToUint32(c.Param("id")),
     }
-    response := NewResponse(c)
+    response := handle.NewResponse(c)
     valid, errs := validator.BindAndValid(c, &body, c.ShouldBindJSON)
     if !valid {
         logger.Log.Errorf(c, "tagUpdate.BindAndValid errs: %v", errs)
@@ -120,7 +121,7 @@ func (t Tag) Update(c *gin.Context) {
 // @Router /api/v1/tags/{id} [delete]
 func (t Tag) Delete(c *gin.Context) {
     param := dto.DeleteTagRequest{}
-    response := NewResponse(c)
+    response := handle.NewResponse(c)
     valid, errs := validator.BindAndValid(c, &param, c.ShouldBindUri)
     if !valid {
         logger.Log.Errorf(c, "tagUpdate.BindAndValid errs: %v", errs)

@@ -1,10 +1,11 @@
-package handle
+package http
 
 import (
     "github.com/gin-gonic/gin"
 
     "blog-service/api/http/dto"
     "blog-service/api/http/errcode"
+    "blog-service/api/http/handle"
     "blog-service/api/http/jwt"
     "blog-service/api/http/validator"
     "blog-service/internal/domain.model/service"
@@ -18,7 +19,7 @@ import (
 
 func GetAuth(c *gin.Context) {
     param := &dto.AuthRequest{}
-    response := NewResponse(c)
+    response := handle.NewResponse(c)
     valid, errs := validator.BindAndValid(c, param, c.ShouldBindJSON)
     if !valid {
         logger.Log.Errorf(c, "getAuth.BindAndValid errs: %v", errs)
